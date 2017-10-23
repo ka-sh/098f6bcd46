@@ -1,17 +1,23 @@
-version: 3.1
+version: "3.2"
 services:
   app:
     image: node:8.7.0-alpine
-    port: "8080:8080"
+    command: npm i
+    ports:
+      - "8080:8080"
     volumes:
-      - app-vol: ./app
-
-  app-db:
-    image: postgres
-    environment:
-      - POSTGRES_PASSWORD=psPass
-    volumes: ./volumes/app-db
-
-volumes:
-  app-vol:
-  app-db-vol:
+      - type: bind
+        source: ./app
+        target: /app
+    command:  npm start --prefix ./app/
+    #
+#   app-db:
+#     image: postgres
+#     environment:
+#       - POSTGRES_PASSWORD=psPass
+#     volumes:
+#       - app-db-vol:./volumes/app-db
+#
+# volumes:
+#   app-vol:
+#   app-db-vol:
