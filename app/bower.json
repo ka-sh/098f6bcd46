@@ -1,0 +1,20 @@
+{
+  "name": "app",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "kash <kareem.elshahawe@paycelerate.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/ka-sh/098f6bcd46",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "pure": "^1.0.0"
+  }
+}
