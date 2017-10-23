@@ -4,14 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --legacy-watch ./",
+    "start": "npm i && nodemon --legacy-watch ./",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.2",
-    "express-hbs": "^1.0.4",
+    "express-handlebars": "^3.0.0",
     "nodemon": "^1.12.1"
   }
 }
