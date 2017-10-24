@@ -4,12 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm i && nodemon --legacy-watch ./",
+    "start": "npm i&& bower --allow-root install  && nodemon --legacy-watch ./",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bower": "^1.8.2",
     "express": "^4.16.2",
     "express-handlebars": "^3.0.0",
     "nodemon": "^1.12.1"
