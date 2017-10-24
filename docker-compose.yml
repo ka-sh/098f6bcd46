@@ -1,5 +1,11 @@
 version: "3.2"
 services:
+  app-db:
+    image: postgres:10
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - PSTGRES_USER=postgres
+      - POSTGRES_DB=prenetics
   app:
     image: node:8
     ports:
@@ -8,15 +14,15 @@ services:
       - type: bind
         source: ./app
         target: /app
-    command:  npm start --prefix ./app/
-    #
-#   app-db:
-#     image: postgres
-#     environment:
-#       - POSTGRES_PASSWORD=psPass
-#     volumes:
-#       - app-db-vol:./volumes/app-db
-#
+    # command: ["./wait-for-it.sh", "app-db", "--", "npm", "start","--","prefix","./app/"]
+    command: ./wait-for-it.sh app-db
+    command: npm start --prefix ./app/
+    depends_on:
+      - app-db
+    links:
+      - app-db
+
+
 # volumes:
-#   app-vol:
-#   app-db-vol:
+# #   app-vol:
+# #  app-db-data:
