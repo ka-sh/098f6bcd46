@@ -1,0 +1,20 @@
+<div class="">
+  <div class="pure-g">
+  <img src="imgs/logo.png">
+  </div>
+
+  <form class="pure-form" action="/login" method="post">
+        <fieldset>
+      <input  placeholder="User Name" name="uname">
+            <input type="password" placeholder="Password" name="password">
+
+            <button type="submit" class="pure-button pure-button-primary">Sign in</button>
+        </fieldset>
+  </form>
+
+</div>
+{{#if errors}}
+{{#each errors}}
+<p style="color:red;">{{msg}}</p>
+{{/each}}
+{{/if}}
