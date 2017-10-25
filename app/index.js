@@ -12,6 +12,49 @@ const expressValidator = require('express-validator');
 const flash = require('connect-flash');
 const utils = require('./utils.js');
 
+/**
+ * Setting up passport local Strategy
+ */
+
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    console.log("****************checking for credentials********");
+    User.find({
+        where: {
+          username: username
+        }
+      })
+      .then(function resolved(user) {
+        if (user == null) {
+          return done(null, false, {
+            msg: 'Invalid Username or password.'
+          });
+        } else if (isValidPassword(password, user.get('password'))) {
+          return done(null, user);
+        } else {
+          return done(null, false, {
+            msg: 'Invalid Username or password.'
+          });
+        }
+
+      }, function onReject(reason) {
+        console.log('Unknown users', reason);
+        return done(null, false, {
+          msg: 'Invalid Username or password.'
+        });
+      });
+  }
+));
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
+
+
 app.use(cookieParser());
 
 
@@ -31,7 +74,8 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 app.use(cookieParser());
-//
+
+
 // Express Session
 app.use(session({
   secret: 'secret',
@@ -79,34 +123,27 @@ app.use(function(req, res, next) {
 app.get('/', function(req, res) {
   res.render('login');
 });
+app.get('/login', function(req, res) {
+  res.render('login');
+});
 /**
  * Handling login
  */
-app.post('/login', function(req, res) {
-  req.checkBody('uname', 'user name is required.!!').notEmpty();
-  req.checkBody('password', 'Password is required.!!').notEmpty();
-  if (req.validationErrors()) {
-    res.render('login', {
-      errors: req.validationErrors()
-    });
-  } else {
-    User.find({
-      where: {
-        uname: req.body.uname
-      }
-    }).then(function(user) {
-      if (isValidPassword(req.body.password, user.get('password'))) {
-        res.render('home');
-      } else {
-        res.render('login', {
-          errors: [{
-            msg: "Invalid Password"
-          }]
-        });
-      }
-    });
-  }
-});
+app.post('/login',
+  passport.authenticate('local', {
+    failureRedirect: '/login',
+    successRedirect: '/home',
+    failureFlash: true
+  }));
+
+app.get('/home',
+  passport.authenticate('local', {
+    failureRedirect: '/login',
+    failureFlash: true
+  }),
+  function(req, res) {
+    res.render('home');
+  });
 
 
 app.listen(8080, function() {

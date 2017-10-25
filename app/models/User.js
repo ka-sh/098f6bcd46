@@ -7,7 +7,7 @@ const User = sequelize.define('user', {
   clientId: {
     type: Sequelize.UUID
   },
-  uname: {
+  username: {
     type: Sequelize.STRING
   },
   password: {
@@ -17,7 +17,7 @@ const User = sequelize.define('user', {
 User.sync().then(function resolve() {
   User.findOrCreate({
     where: {
-      uname: "test"
+      username: "test"
     },
     defaults: {
       password: utils.hash('test'),
