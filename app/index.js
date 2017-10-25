@@ -47,13 +47,20 @@ passport.use(new LocalStrategy(
 ));
 
 passport.serializeUser(function(user, done) {
-  done(null, user);
+  console.log("==>>>serializeUser");
+  done(null, user.get('id'));
 });
 
-passport.deserializeUser(function(user, done) {
-  done(null, user);
+passport.deserializeUser(function(id, done) {
+  console.log("===>>Finxing User by ID");
+  User.find({
+    where: {
+      id: id
+    }
+  }).then(function(user) {
+    done(null, user);
+  });
 });
-
 
 app.use(cookieParser());
 
@@ -134,17 +141,24 @@ app.post('/login',
     failureRedirect: '/login',
     successRedirect: '/home',
     failureFlash: true
-  }));
-
-app.get('/home',
-  passport.authenticate('local', {
-    failureRedirect: '/login',
-    failureFlash: true
   }),
   function(req, res) {
     res.render('home');
   });
 
+app.get('/home', ensureAuthenticated,
+  function(req, res) {
+    res.render('home');
+  });
+
+function ensureAuthenticated(req, res, next) {
+  console.log("Ensuring Authenticated....");
+  if (req.isAuthenticated()) {
+    return next();
+  } else {
+    res.redirect('/login');
+  }
+}
 
 app.listen(8080, function() {
   console.log('Example app listening on port 8080!')
